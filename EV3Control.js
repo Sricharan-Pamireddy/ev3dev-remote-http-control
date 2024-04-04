@@ -71,18 +71,17 @@ module.exports = class EV3Control {
         });
     }
 
-    // test commit
-
     async scanPorts() {
         var path = `/sys/class/tacho-motor/`;
-        var list = await this.command(`ls ${path}`).split("\n");
+        var list = await this.command(`ls ${path}`);
+        list = list.split("\n");
         list.pop();
 
         for (var i in list) {
             var mpath = `${path}${list[i]}/`;
             var port = await this.command(`cat ${mpath}address`);
             port = port.trim();
-            var letter = port.slice(0, -1);
+            var letter = port.charAt(port.length - 1);
             this.motorCache[letter] = mpath;
         }
     }

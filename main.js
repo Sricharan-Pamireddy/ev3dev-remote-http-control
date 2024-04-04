@@ -11,5 +11,7 @@ args = args.slice(2);
 var bot = new EV3Control(args[0], args[1], args[2], args[3]);
 
 bot.on('ready', async () => {
-    console.log(await bot.command(`ls /home/robot`));
+    console.log(bot.motorCache);
+    await bot.scanPorts();
+    console.log(bot.motorCache);
 });
