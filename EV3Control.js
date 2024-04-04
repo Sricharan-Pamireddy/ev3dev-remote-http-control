@@ -37,6 +37,8 @@ module.exports = class EV3Control {
                 this.emit('ready');
             });
         });
+
+        this.motorCache = {};
     }
 
     on(event, callback) {
@@ -67,5 +69,19 @@ module.exports = class EV3Control {
             var res = await fetch(`http://${this.address}:${pythonPort}/bash/${encoded}`);
             resolve(res.text());
         });
+    }
+
+    async scanPorts() {
+        var path = `/sys/class/tacho-motor/`;
+        var list = await this.command(`ls ${path}`).split("\n");
+        list.pop();
+
+        for (var i in list) {
+            var mpath = `${path}${list[i]}/`;
+            var port = await this.command(`cat ${mpath}address`);
+            port = port.trim();
+            var letter = port.slice(0, -1);
+            this.motorCache[letter] = mpath;
+        }
     }
 }
