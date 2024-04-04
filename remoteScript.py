@@ -29,29 +29,6 @@ def run_direct_motors():
 reset_motors()
 run_direct_motors()
 
-def motor_exists(c):
-  if (c == 'A' or c == 'B' or c == 'C' or c == 'D'):
-    list = os.listdir(motor_path)
-    for i in list:
-      f = open(motor_path + i + "/address", "r")
-      compareString = "ev3-ports:out" + c + "\n"
-      output = f.read()
-      if (output == compareString):
-        print(i + " exists as letter " + c)
-        return motor_path + i
-    return false
-
-def set_motor_speed(letter, speed):
-  motor = motor_exists(letter)
-  if (motor != false):
-    f = open(motor + "/duty_cycle_sp", "w")
-    f.write(speed)
-    f.close()
-    print("motor " + letter + " speed = " + speed)
-    return true
-  else:
-    return false
-
 import subprocess
 import base64
 
