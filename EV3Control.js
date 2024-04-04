@@ -41,6 +41,9 @@ module.exports = class EV3Control {
         });
 
         this.motorCache = {};
+        this.error = {
+            MotorNotFound: new Error(`Motor Not Found In Motor Cache!!!`)
+        };
     }
 
     on(event, callback) {
@@ -98,6 +101,9 @@ module.exports = class EV3Control {
         for (var i in arr) {
             var letter = arr[i][0];
             var speed = arr[i][1];
+            if (this.motorCache[letter] == undefined) {
+                throw this.error.MotorNotFound;
+            }
             str += `echo ${speed} > ${this.motorCache[letter]}duty_cycle_sp; `;
         }
         await this.command(str);
