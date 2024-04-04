@@ -9,6 +9,8 @@ So I have delegated the majority of the networking and thinking to be done by a 
 
 Since the Raspberry Pi will have to do the "thinking", I made this class as a way to communicate with the Ev3 from the Pi.
 
+The code that runs on the EV3 is written in python because there is practically no node.js support for the Ev3 (I am more comfortable using node.js than python)
+
 DISCLAIMER:
 This module is really janky and I've only uploaded it so that other people can see what I'm up to. Use it at your own risk. I'm not responsible for any damage caused.
 
