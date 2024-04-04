@@ -11,6 +11,5 @@ args = args.slice(2);
 var bot = new EV3Control(args[0], args[1], args[2], args[3]);
 
 bot.on('ready', async () => {
-    var res = await fetch(`http://ev3dev.local:8080/bash/bHMgL2hvbWUvcm9ib3Q=`);
-    console.log(res);
+    console.log(await bot.command(`ls /home/robot`));
 });

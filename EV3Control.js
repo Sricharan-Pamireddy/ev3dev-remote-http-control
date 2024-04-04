@@ -1,6 +1,7 @@
 const { NodeSSH } = require('node-ssh')
 const localScriptPath = `./remoteScript.py`;
 const remoteScriptPath = `./remote/remoteScript.py`;
+const pythonPort = 8080;
 
 //Event Emitter Logic From https://javascript.plainenglish.io/building-a-simple-event-emitter-in-javascript-f82f68c214ad
 
@@ -21,13 +22,13 @@ module.exports = class EV3Control {
             password: password
         }).then(() => {
             ssh.putFile(localScriptPath, remoteScriptPath).then(async () => {
-                ssh.execCommand(`killall screen; screen -S server -dm python3 ${remoteScriptPath}`);
+                ssh.execCommand(`python3 ${remoteScriptPath}`);
                 // I know this loop is janky lol
                 // It's to make sure that we know when the webserver is started on the Ev3
                 var loop = true;
                 while (loop) {
                     try {
-                        await fetch(`http://${this.address}:8080`);
+                        await fetch(`http://${this.address}:${pythonPort}`);
                         loop = false;
                     } catch (err) {
                         loop = true;
@@ -58,5 +59,13 @@ module.exports = class EV3Control {
                 setTimeout(() => callback(...data), 0);
             });
         }
+    }
+
+    async command(str) {
+        return new Promise(async (resolve) => {
+            var encoded = btoa(str);
+            var res = await fetch(`http://${this.address}:${pythonPort}/bash/${encoded}`);
+            resolve(res.text());
+        });
     }
 }
