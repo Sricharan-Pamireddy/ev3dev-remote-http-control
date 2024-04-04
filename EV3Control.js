@@ -34,6 +34,8 @@ module.exports = class EV3Control {
                         loop = true;
                     }
                 }
+                await this.scanPorts();
+                await this.resetAllMotors();
                 this.emit('ready');
             });
         });
@@ -73,8 +75,7 @@ module.exports = class EV3Control {
 
     async resetAllMotors() {
         var str = "";
-        for (var i in this.motorCache)
-        {
+        for (var i in this.motorCache) {
             str += `echo reset > ${this.motorCache[i]}command; `;
         }
         await this.command(str);
@@ -82,8 +83,7 @@ module.exports = class EV3Control {
 
     async runDirectAllMotors() {
         var str = "";
-        for (var i in this.motorCache)
-        {
+        for (var i in this.motorCache) {
             str += `echo run-direct > ${this.motorCache[i]}command; `;
         }
         await this.command(str);
