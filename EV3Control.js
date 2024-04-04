@@ -117,4 +117,10 @@ module.exports = class EV3Control {
             this.motorCache[letter] = mpath;
         }
     }
+
+    listMotors() {
+        var list = [];
+        for (var i in this.motorCache) list.push(i);
+        return list;
+    }
 }

@@ -11,11 +11,8 @@ args = args.slice(2);
 var bot = new EV3Control(args[0], args[1], args[2], args[3]);
 
 bot.on('ready', async () => {
-    console.log(bot.motorCache);
     await bot.runDirectAllMotors();
-    await bot.setMotorSpeed("A", 50);
-    await bot.setMotorSpeed("D", 50);
-    await bot.setMotorSpeed("A", -50);
-    await bot.setMotorSpeed("D", -50);
+    await bot.setMotorSpeeds([["A", 50], ["D", 50]])
+    await bot.setMotorSpeeds([["A", -50], ["D", -50]])
     await bot.resetAllMotors();
 });
