@@ -71,6 +71,8 @@ module.exports = class EV3Control {
         });
     }
 
+    // test commit
+
     async scanPorts() {
         var path = `/sys/class/tacho-motor/`;
         var list = await this.command(`ls ${path}`).split("\n");
