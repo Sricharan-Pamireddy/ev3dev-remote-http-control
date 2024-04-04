@@ -6,4 +6,14 @@ Why This Repo Exists:
     but a Lego Mindstorms Ev3 does not have capable enough hardware or software support.
     So I have delegated the majority of the networking and thinking to be done by a Raspberry pi 3B+
 
-    Since the Raspberry Pi will have to do the "thinking", I made this class as a way to communicate with the Ev3 from the Pi.    
+    Since the Raspberry Pi will have to do the "thinking", I made this class as a way to communicate with the Ev3 from the Pi.
+
+DISCLAIMER:
+    This module is really janky and I've only uploaded it so that other people can see what I'm up to. Use it at your own risk. I'm not responsible for any damage caused.
+
+How To Use This Module:
+    To use this node.js module just clone this repo or download the repo as a zip file.
+    There is one required dependency, which is the ```node-ssh``` module.
+    To install it use the command ```npm install node-ssh```. Also check out its npmjs page at https://www.npmjs.com/package/node-ssh.
+
+    For examples on how to use the class, check ```main.js```
