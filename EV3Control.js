@@ -1,5 +1,5 @@
-const { NodeSSH } = require('node-ssh')
-const localScriptPath = `./remoteScript.py`;
+const { NodeSSH } = require('node-ssh');
+const localScriptPath = `${__dirname}/remoteScript.py`;
 const remoteScriptPath = `./remote/remoteScript.py`;
 const pythonPort = 8080;
 
