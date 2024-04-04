@@ -71,6 +71,15 @@ module.exports = class EV3Control {
         });
     }
 
+    async resetAllMotors() {
+        var str = "";
+        for (var i in this.motorCache)
+        {
+            str += `echo reset > ${this.motorCache[i]}command; `;
+        }
+        await this.command(str);
+    }
+
     async setMotorSpeed(letter, speed) {
         return await this.setMotorSpeeds([[letter, speed]]);
     }

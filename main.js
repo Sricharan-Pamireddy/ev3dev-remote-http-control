@@ -13,5 +13,5 @@ var bot = new EV3Control(args[0], args[1], args[2], args[3]);
 bot.on('ready', async () => {
     await bot.scanPorts();
     console.log(bot.motorCache);
-    await bot.setMotorSpeed("A", 50);
+    await bot.resetAllMotors();
 });
