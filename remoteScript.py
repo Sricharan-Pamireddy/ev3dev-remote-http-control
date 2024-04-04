@@ -8,27 +8,6 @@ false = False
 
 motor_path = "/sys/class/tacho-motor/"
 
-def reset_motors():
-  list = os.listdir(motor_path)
-  for i in list:
-    motor = open(motor_path + i + "/command", "w")
-    motor.write("reset")
-    motor.close()
-    motor = open(motor_path + i + "/duty_cycle_sp", "w")
-    motor.write("0")
-    motor.close()
-  print("Motors reset")
-
-def run_direct_motors():
-  list = os.listdir(motor_path)
-  for i in list:
-    motor = open(motor_path + i + "/command", "w")
-    motor.write("run-direct")
-    motor.close()
-
-reset_motors()
-run_direct_motors()
-
 import subprocess
 import base64
 
