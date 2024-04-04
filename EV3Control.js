@@ -22,7 +22,7 @@ module.exports = class EV3Control {
             password: password
         }).then(() => {
             ssh.putFile(localScriptPath, remoteScriptPath).then(async () => {
-                ssh.execCommand(`python3 ${remoteScriptPath}`);
+                ssh.execCommand(`killall screen; screen -S server -dm python3 ${remoteScriptPath}`);
                 // I know this loop is janky lol
                 // It's to make sure that we know when the webserver is started on the Ev3
                 var loop = true;
@@ -69,6 +69,20 @@ module.exports = class EV3Control {
             var res = await fetch(`http://${this.address}:${pythonPort}/bash/${encoded}`);
             resolve(res.text());
         });
+    }
+
+    async setMotorSpeed(letter, speed) {
+        return await this.setMotorSpeeds([[letter, speed]]);
+    }
+
+    async setMotorSpeeds(arr) {
+        var str = ``;
+        for (var i in arr) {
+            var letter = arr[i][0];
+            var speed = arr[i][1];
+            str += `echo ${speed} > ${this.motorCache[letter]}duty_cycle_sp; `;
+        }
+        await this.command(str);
     }
 
     async scanPorts() {
