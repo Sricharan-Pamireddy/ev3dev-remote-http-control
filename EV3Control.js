@@ -89,15 +89,6 @@ module.exports = class EV3Control {
         await this.command(str);
     }
 
-    async stallAllMotors() {
-        var str = "";
-        for (var i in this.motorCache)
-        {
-            str += `echo 0 > ${this.motorCache[i]}duty_cycle_sp; `;
-        }
-        await this.command(str);
-    }
-
     async setMotorSpeed(letter, speed) {
         return await this.setMotorSpeeds([[letter, speed]]);
     }
