@@ -5,8 +5,33 @@ const pythonPort = 8080;
 
 //Event Emitter Logic From https://javascript.plainenglish.io/building-a-simple-event-emitter-in-javascript-f82f68c214ad
 
+var express = require('express');
+var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
+app.get("/", (req, res) => {
+    res.write(Date.now());
+    res.end();
+});
+
+io.on('connection', function (socket) {
+    console.log('A user connected');
+    socket.emit("hello", "world", (msg) => {
+        console.log(msg);
+    });
+
+    socket.on('disconnect', async function () {
+        console.log(`A user disconnected`);
+    });
+});
+
+// http.listen(port, function () {
+//     console.log(`WebServer started on port ${port}`);
+// });
+
 module.exports = class EV3Control {
-    constructor(address, port, username, password) {
+    constructor(address, port, username, password, webServerPort) {
         this.address = address;
         this.port = port;
         this.username = username;
@@ -14,31 +39,21 @@ module.exports = class EV3Control {
 
         this.events = new Map();
 
-        var ssh = new NodeSSH();
-        ssh.connect({
-            host: this.address,
-            port: this.port,
-            username: this.username,
-            password: password
-        }).then(() => {
-            ssh.putFile(localScriptPath, remoteScriptPath).then(async () => {
-                ssh.execCommand(`killall screen; screen -S server -dm python3 ${remoteScriptPath}`);
-                // I know this loop is janky lol
-                // It's to make sure that we know when the webserver is started on the Ev3
-                var loop = true;
-                while (loop) {
-                    try {
-                        await fetch(`http://${this.address}:${pythonPort}`);
-                        loop = false;
-                    } catch (err) {
-                        loop = true;
-                    }
-                }
-                await this.scanPorts();
-                await this.resetAllMotors();
-                this.emit('ready');
-            });
+        http.listen(webServerPort, function () {
+            console.log(`WebServer started on port ${webServerPort}`);
         });
+
+        var ssh = new NodeSSH();
+        // ssh.connect({
+        //     host: this.address,
+        //     port: this.port,
+        //     username: this.username,
+        //     password: password
+        // }).then(() => {
+        //     ssh.putFile(localScriptPath, remoteScriptPath).then(async () => {
+        //         ssh.execCommand(`killall screen; screen -S server -dm python3 ${remoteScriptPath}`);
+        //     });
+        // });
 
         this.motorCache = {};
         this.error = {
